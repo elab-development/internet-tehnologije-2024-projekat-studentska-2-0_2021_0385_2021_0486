@@ -11,8 +11,18 @@ use Carbon\Carbon;
 
 class ExamEnrollmentController extends Controller
 {
+
+     private function isStudent() {
+        return Auth::user()->role === 'student';
+    }
+
     public function myEnrollments()
     {
+
+        if (!$this->isStudent()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
         $student = Auth::user();
 
         $enrollments = ExamEnrollment::where('student_id', $student->id)->with('course')->get();
@@ -22,6 +32,11 @@ class ExamEnrollmentController extends Controller
 
     public function enrollToCourse(Request $request)
     {
+
+        if (!$this->isStudent()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+        
         $validator = Validator::make($request->all(), [
             'course_id' => 'required|integer|exists:courses,id'
         ]);

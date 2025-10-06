@@ -15,6 +15,9 @@ class StudentController extends Controller
   
     public function index()
     {
+        if (Auth::user()->role !== 'admin') {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
         return response()->json(Student::all(), 200);
     }
 
@@ -25,12 +28,21 @@ class StudentController extends Controller
 
     public function show(Student $student)
     {
+        if (Auth::user()->role !== 'admin') {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
         return response()->json($student, 200);
     }
 
 
     public function update(Request $request, Student $student)
     {
+
+        $ulogovaniKorisnik = Auth::user();
+
+        if ($ulogovaniKorisnik->role !== 'admin' && $ulogovaniKorisnik->id !== $student->id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
    
         $validator = Validator::make($request->all(), [
             'ime' => 'string|max:255',
@@ -50,12 +62,20 @@ class StudentController extends Controller
 
     public function destroy(Student $student)
     {
+        if (Auth::user()->role !== 'admin') {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
         $student->delete();
         return response()->json(null, 204);
     }
 
      public function generateConfirmationPdf()
     {
+
+        if (Auth::user()->role !== 'student') {
+            return response()->json(['message' => 'Only students can generate this document.'], 403);
+        }
+
         $student = Auth::user();
 
         $data = [

@@ -20,6 +20,7 @@ class Student extends Authenticatable
         'password',
         'datum_rodjenja',
         'status',
+        'role',
     ];
 
 
