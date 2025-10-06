@@ -32,6 +32,7 @@ class Student extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'datum_rodjenja' => 'date',
             'password' => 'hashed',
         ];
     }
@@ -45,6 +46,12 @@ class Student extends Authenticatable
   
     public function courses()
     {
-        return $this->belongsToMany(Course::class, 'exam_enrollments');
+        return $this->belongsToMany(
+            Course::class,
+            'exam_enrollments',
+            'student_id',
+            'course_id'
+        )->withPivot(['datum_prijave', 'ocena'])
+         ->withTimestamps();
     }
 }
