@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\ExamEnrollment;
+use App\Http\Resources\ExamEnrollmentResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -27,7 +28,7 @@ class ExamEnrollmentController extends Controller
 
         $enrollments = ExamEnrollment::where('student_id', $student->id)->with('course')->get();
 
-        return response()->json($enrollments, 200);
+        return ExamEnrollmentResource::collection($enrollments);
     }
 
     public function enrollToCourse(Request $request)
@@ -36,7 +37,7 @@ class ExamEnrollmentController extends Controller
         if (!$this->isStudent()) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
-        
+
         $validator = Validator::make($request->all(), [
             'course_id' => 'required|integer|exists:courses,id'
         ]);

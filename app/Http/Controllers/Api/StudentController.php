@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Student;
+use App\Http\Resources\StudentResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -18,7 +19,7 @@ class StudentController extends Controller
         if (Auth::user()->role !== 'admin') {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
-        return response()->json(Student::all(), 200);
+        return StudentResource::collection(Student::all());
     }
 
     public function store(Request $request)
@@ -31,7 +32,7 @@ class StudentController extends Controller
         if (Auth::user()->role !== 'admin') {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
-        return response()->json($student, 200);
+        return new StudentResource($student);
     }
 
 
@@ -57,7 +58,7 @@ class StudentController extends Controller
 
         $student->update($validator->validated());
 
-        return response()->json($student, 200);
+        return new StudentResource($student);
     }
 
     public function destroy(Student $student)

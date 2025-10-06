@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Http\Resources\CourseResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -19,7 +20,7 @@ class CourseController extends Controller
     public function index()
     {
         $courses = Course::all();
-        return response()->json($courses, 200);
+        return CourseResource::collection($courses);
     }
 
     public function store(Request $request)
@@ -42,13 +43,13 @@ class CourseController extends Controller
 
         $course = Course::create($validator->validated());
 
-        return response()->json($course, 201);
+        return new CourseResource($course);
     }
 
 
     public function show(Course $course)
     {
-        return response()->json($course, 200);
+        return new CourseResource($course);
     }
 
   
@@ -71,7 +72,7 @@ class CourseController extends Controller
 
         $course->update($validator->validated());
 
-        return response()->json($course, 200);
+        return new CourseResource($course);
     }
 
 
