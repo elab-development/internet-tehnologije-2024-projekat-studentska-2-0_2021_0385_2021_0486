@@ -14,6 +14,11 @@ return new class extends Migration
         Schema::create('exam_enrollments', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
+            $table->foreignId('course_id')->constrained('courses')->onDelete('cascade');
+            $table->date('datum_prijave');
+            $table->integer('ocena')->nullable();
+            $table->unique(['student_id', 'course_id']);
         });
     }
 
