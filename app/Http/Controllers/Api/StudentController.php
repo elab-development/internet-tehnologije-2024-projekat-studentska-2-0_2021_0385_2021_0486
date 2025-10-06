@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class StudentController extends Controller
 {
@@ -49,5 +52,19 @@ class StudentController extends Controller
     {
         $student->delete();
         return response()->json(null, 204);
+    }
+
+     public function generateConfirmationPdf()
+    {
+        $student = Auth::user();
+
+        $data = [
+            'student' => $student,
+            'datum' => Carbon::now()->format('d.m.Y.') // Formatiraj današnji datum
+        ];
+
+        $pdf = PDF::loadView('pdfs.student_confirmation', $data);
+
+        return $pdf->download('potvrda-' . str_replace('/', '-', $student->broj_indeksa) . '.pdf');
     }
 }
