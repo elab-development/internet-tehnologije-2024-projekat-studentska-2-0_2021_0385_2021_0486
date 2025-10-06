@@ -12,8 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('students', function (Blueprint $table) {
-            $table->id();
+             $table->id();
+            $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
+            $table->foreignId('course_id')->constrained('courses')->onDelete('cascade');
+            $table->date('datum_prijave');
+            $table->integer('ocena')->nullable();
             $table->timestamps();
+            /// Dodatno ogranicenje: jedan student ne mozee dva puta prijaviti isti ispit
+            $table->unique(['student_id', 'course_id']);
         });
     }
 
