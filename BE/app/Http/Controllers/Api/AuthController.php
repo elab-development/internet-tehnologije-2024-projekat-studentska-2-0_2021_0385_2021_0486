@@ -8,6 +8,7 @@ use App\Models\Student;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\StudentResource;
 
 class AuthController extends Controller
 {
@@ -29,7 +30,7 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Student uspešno registrovan!',
-            'student' => $student
+            'student' => new StudentResource($student)
         ], 201);
     }
 
@@ -55,7 +56,7 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer',
-            'student' => $student
+            'student' => new StudentResource($student)
         ]);
     }
 
