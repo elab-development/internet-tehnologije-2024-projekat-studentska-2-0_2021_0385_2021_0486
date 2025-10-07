@@ -1,1 +1,70 @@
+@use "@angular/material" as mat;
+
+@include mat.core();
+
+$student-brand-family: "Inter", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue",
+	Arial, sans-serif;
+
+$student-primary: mat.$violet-palette;
+$student-tertiary: mat.$rose-palette;
+
+$student-typography: (
+	brand-family: $student-brand-family,
+	plain-family: $student-brand-family
+);
+
+$student-density: (
+	scale: 0
+);
+
+$student-light-config: (
+	color: (
+		theme-type: light,
+		primary: $student-primary,
+		tertiary: $student-tertiary
+	),
+	typography: $student-typography,
+	density: $student-density
+);
+
+$student-dark-config: (
+	color: (
+		theme-type: dark,
+		primary: $student-primary,
+		tertiary: $student-tertiary
+	),
+	typography: $student-typography,
+	density: $student-density
+);
+
+$student-light-theme: mat.define-theme($student-light-config);
+$student-dark-theme: mat.define-theme($student-dark-config);
+
+:root {
+	color-scheme: light;
+	@include mat.theme($student-light-config);
+	@include mat.all-component-themes($student-light-theme);
+}
+
+body.dark-theme {
+	color-scheme: dark;
+	@include mat.theme($student-dark-config);
+	@include mat.all-component-themes($student-dark-theme);
+}
+
+body {
+	min-height: 100vh;
+	margin: 0;
+	font-family: $student-brand-family;
+	background-color: var(--mat-sys-background);
+	color: var(--mat-sys-on-surface);
+	transition: background-color 200ms ease, color 200ms ease;
+}
+
+app-root {
+	display: block;
+	min-height: 100vh;
+	background: radial-gradient(circle at top right, color-mix(in srgb, var(--mat-sys-color-primary) 12%, transparent) 0%, transparent 60%),
+		radial-gradient(circle at bottom left, color-mix(in srgb, var(--mat-sys-color-tertiary) 10%, transparent) 0%, transparent 65%);
+}
 /* You can add global styles to this file, and also import other style files */
