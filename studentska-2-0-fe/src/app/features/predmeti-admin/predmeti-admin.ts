@@ -58,6 +58,15 @@ export class PredmetiAdmin implements OnInit {
     this.loadCourses();
   }
 
+  onTableScroll(event: Event): void {
+    const target = event.target as HTMLElement;
+    if (target.scrollTop > 0) {
+      target.classList.add('scrolled');
+    } else {
+      target.classList.remove('scrolled');
+    }
+  }
+
   loadCourses(): void {
     this.isLoading.set(true);
     

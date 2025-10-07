@@ -67,7 +67,6 @@
   }
 
   .content-section {
-    max-height: 500px;
     .table-card {
       mat-card-header {
         mat-card-title {
@@ -131,8 +130,76 @@
           }
         }
 
+        .scroll-hint {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          padding: 12px 16px;
+          background-color: #f5f5f5;
+          border: 1px solid #e0e0e0;
+          border-radius: 8px 8px 0 0;
+          color: #666;
+          font-size: 14px;
+          animation: pulse 2s infinite;
+
+          mat-icon {
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
+            color: #667eea;
+          }
+        }
+
+        .scroll-hint + .table-container {
+          border-top: none;
+          border-radius: 0 0 8px 8px;
+        }
+
         .table-container {
-          overflow-x: auto;
+          max-height: 800px;
+          overflow: auto;
+          border: 1px solid #e0e0e0;
+          border-radius: 8px;
+          position: relative;
+          
+          // Custom scrollbar styling
+          &::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+          }
+
+          &::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+          }
+
+          &::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+            
+            &:hover {
+              background: #a1a1a1;
+            }
+          }
+
+          // Scroll shadow indicators
+          &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), transparent);
+            z-index: 101;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+          }
+
+          &.scrolled::before {
+            opacity: 1;
+          }
 
           .courses-table {
             width: 100%;
@@ -143,6 +210,9 @@
               font-weight: 600;
               color: #333;
               border-bottom: 2px solid #e9ecef;
+              position: sticky;
+              top: 0;
+              z-index: 100;
             }
 
             td {
@@ -368,6 +438,15 @@
   }
 }
 
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
 // Responsive design
 @media (max-width: 768px) {
   .predmeti-admin-container {
@@ -385,6 +464,8 @@
     }
 
     .content-section .table-card mat-card-content .table-container {
+      max-height: 600px; // Smanjimo na mobile
+
       .courses-table {
         font-size: 14px;
 

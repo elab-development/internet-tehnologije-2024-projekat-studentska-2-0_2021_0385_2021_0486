@@ -52,7 +52,14 @@
             <p>Kliknite na "Dodaj novi kurs" da biste dodali prvi kurs.</p>
           </div>
         } @else {
-          <div class="table-container">
+          @if (courses().length > 10) {
+            <div class="scroll-hint">
+              <mat-icon>keyboard_arrow_down</mat-icon>
+              <span>Skroluj dole da vidiš više kurseva ({{ courses().length - 10 }} dodatnih)</span>
+            </div>
+          }
+          
+          <div class="table-container" (scroll)="onTableScroll($event)">
             <table mat-table [dataSource]="courses()" class="courses-table">
               <!-- Naziv Column -->
               <ng-container matColumnDef="naziv">
