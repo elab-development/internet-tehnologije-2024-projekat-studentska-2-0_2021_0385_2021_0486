@@ -1,0 +1,53 @@
+<mat-sidenav-container class="shell-container">
+	<mat-sidenav
+		#sidenav
+		[mode]="isMobile() ? 'over' : 'side'"
+		[opened]="!isMobile()"
+		class="shell-sidenav"
+		aria-label="Main navigation"
+	>
+		<div class="brand">
+			<mat-icon class="brand-icon">school</mat-icon>
+			<span class="brand-name">Studentska</span>
+		</div>
+
+		<div class="nav-items">
+			@for (item of visibleItems(); track item.path) {
+				<a class="nav-item" [routerLink]="item.path" routerLinkActive="active" (click)="isMobile() && sidenav.close()">
+					@if (item.icon) {
+						<mat-icon aria-hidden="true">{{ item.icon }}</mat-icon>
+					}
+					<span>{{ item.label }}</span>
+				</a>
+			}
+		</div>
+    <div class="spacer"></div>
+		<div class="sidenav-footer">
+			<button mat-icon-button (click)="toggleTheme()" [title]="'Prebaci na ' + nextSchemeLabel() + ' temu'">
+				<mat-icon>{{ themeService.isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+			</button>
+			<button mat-icon-button title="Odjavi se" (click)="logout()">
+				<mat-icon>logout</mat-icon>
+			</button>
+		</div>
+	</mat-sidenav>
+
+	<mat-sidenav-content class="shell-content">
+		<mat-toolbar>
+			@if (isMobile()) {
+				<button mat-icon-button aria-label="Open navigation" (click)="sidenav.toggle()">
+					<mat-icon>menu</mat-icon>
+				</button>
+			}
+			<span class="spacer"></span>
+			<div class="user-info">
+				<span class="user-name">{{ userSig()?.ime }} {{ userSig()?.prezime }}</span>
+				<span class="user-role">{{ userSig()?.uloga }}</span>
+			</div>
+		</mat-toolbar>
+
+		<main class="content-wrapper">
+			<router-outlet />
+		</main>
+	</mat-sidenav-content>
+</mat-sidenav-container>

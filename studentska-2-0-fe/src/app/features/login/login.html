@@ -1,1 +1,40 @@
-<p>login works!</p>
+<div class="login-container">
+	<mat-card appearance="outlined">
+		<mat-card-header>
+			<mat-card-title>Prijava</mat-card-title>
+			<mat-card-subtitle>Unesite Vaše podatke za prijavu</mat-card-subtitle>
+		</mat-card-header>
+		<mat-card-content>
+			<form [formGroup]="form" (ngSubmit)="onSubmit()" class="form">
+				@if (authMessage()) {
+					<p class="error">{{ authMessage() }}</p>
+				}
+
+				<mat-form-field>
+					<mat-label>Email</mat-label>
+					<input matInput type="email" formControlName="email" required />
+					@if (form.controls.email.touched && form.controls.email.invalid) {
+						<mat-error>Unesite validan email.</mat-error>
+					}
+					@if (serverErrors()['email'] && serverErrors()['email'].length) {
+						<mat-error>{{ serverErrors()['email'][0] }}</mat-error>
+					}
+				</mat-form-field>
+
+				<mat-form-field>
+					<mat-label>Lozinka</mat-label>
+					<input matInput type="password" formControlName="password" required />
+					@if (form.controls.password.touched && form.controls.password.invalid) {
+						<mat-error>Lozinka je obavezna.</mat-error>
+					}
+				</mat-form-field>
+			</form>
+		</mat-card-content>
+		<mat-card-actions align="end">
+			<a mat-button routerLink="/register">Nemaš nalog? Registruj se</a>
+			<button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="submitting() || form.invalid">
+				Prijavi se
+			</button>
+		</mat-card-actions>
+	</mat-card>
+</div>
