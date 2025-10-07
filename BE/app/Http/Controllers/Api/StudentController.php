@@ -1,0 +1,91 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Models\Student;
+use App\Http\Resources\StudentResource;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+
+class StudentController extends Controller
+{
+  
+    public function index()
+    {
+        if (Auth::user()->role !== 'admin') {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+        return StudentResource::collection(Student::all());
+    }
+
+    public function store(Request $request)
+    {
+        return response()->json(['message' => 'Please use the /api/register endpoint to create a student.'], 405); // 405 Method Not Allowed
+    }
+
+    public function show(Student $student)
+    {
+        if (Auth::user()->role !== 'admin') {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+        return new StudentResource($student);
+    }
+
+
+    public function update(Request $request, Student $student)
+    {
+
+        $ulogovaniKorisnik = Auth::user();
+
+        if ($ulogovaniKorisnik->role !== 'admin' && $ulogovaniKorisnik->id !== $student->id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+   
+        $validator = Validator::make($request->all(), [
+            'ime' => 'string|max:255',
+            'prezime' => 'string|max:255',
+            'datum_rodjenja' => 'date',
+            'status' => 'string'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $student->update($validator->validated());
+
+        return new StudentResource($student);
+    }
+
+    public function destroy(Student $student)
+    {
+        if (Auth::user()->role !== 'admin') {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+        $student->delete();
+        return response()->json(null, 204);
+    }
+
+     public function generateConfirmationPdf()
+    {
+
+        if (Auth::user()->role !== 'student') {
+            return response()->json(['message' => 'Only students can generate this document.'], 403);
+        }
+
+        $student = Auth::user();
+
+        $data = [
+            'student' => $student,
+            'datum' => Carbon::now()->format('d.m.Y.') // Formatiraj današnji datum
+        ];
+
+        $pdf = PDF::loadView('pdfs.student_confirmation', $data);
+
+        return $pdf->download('potvrda-' . str_replace('/', '-', $student->broj_indeksa) . '.pdf');
+    }
+}
