@@ -1,0 +1,355 @@
+.prijava-ispita-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+
+  .header {
+    text-align: center;
+    margin-bottom: 3rem;
+
+    h1 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 2.5rem;
+      font-weight: 300;
+      margin-bottom: 0.5rem;
+      color: var(--md-sys-color-on-surface);
+
+      mat-icon {
+        font-size: 2.5rem;
+        width: 2.5rem;
+        height: 2.5rem;
+        color: var(--md-sys-color-primary);
+      }
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: var(--md-sys-color-on-surface-variant);
+      margin: 0;
+    }
+  }
+
+  .content {
+    .loading-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 0;
+      gap: 1rem;
+
+      p {
+        color: var(--md-sys-color-on-surface-variant);
+        font-size: 1.1rem;
+      }
+    }
+
+    .error-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 0;
+      gap: 1rem;
+
+      .error-icon {
+        font-size: 3rem;
+        width: 3rem;
+        height: 3rem;
+        color: var(--md-sys-color-error);
+      }
+
+      .error-message {
+        color: var(--md-sys-color-error);
+        font-size: 1.1rem;
+        text-align: center;
+      }
+    }
+
+    .courses-section {
+      margin-bottom: 3rem;
+
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+
+        h2 {
+          margin: 0;
+          font-size: 1.8rem;
+          font-weight: 400;
+          color: var(--md-sys-color-on-surface);
+        }
+
+        .search-field {
+          min-width: 300px;
+          max-width: 400px;
+        }
+      }
+
+      .no-courses {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 4rem 0;
+        gap: 1rem;
+
+        mat-icon {
+          font-size: 3rem;
+          width: 3rem;
+          height: 3rem;
+          color: var(--md-sys-color-on-surface-variant);
+        }
+
+        p {
+          color: var(--md-sys-color-on-surface-variant);
+          font-size: 1.1rem;
+        }
+      }
+
+      .courses-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 1.5rem;
+      }
+    }
+
+    .course-card {
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: 2px solid transparent;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      }
+
+      &.enrolled {
+        border-color: var(--md-sys-color-primary);
+        background-color: var(--md-sys-color-primary-container);
+      }
+
+      mat-card-header {
+        mat-card-title {
+          font-size: 1.3rem;
+          font-weight: 500;
+          color: var(--md-sys-color-on-surface);
+        }
+
+        mat-card-subtitle {
+          color: var(--md-sys-color-on-surface-variant);
+          font-size: 0.9rem;
+        }
+      }
+
+      mat-card-content {
+        .course-info {
+          .espb-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            background-color: var(--md-sys-color-secondary-container);
+            color: var(--md-sys-color-on-secondary-container);
+            padding: 0.5rem 1rem;
+            border-radius: 16px;
+            font-size: 0.9rem;
+            font-weight: 500;
+
+            mat-icon {
+              font-size: 1rem;
+              width: 1rem;
+              height: 1rem;
+            }
+          }
+        }
+      }
+
+      mat-card-actions {
+        .enrollment-status {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          color: var(--md-sys-color-primary);
+          font-weight: 500;
+          margin-right: 1rem;
+
+          .enrolled-icon {
+            color: var(--md-sys-color-primary);
+          }
+        }
+      }
+    }
+
+    .enrollments-section {
+      h2 {
+        margin-bottom: 1.5rem;
+        font-size: 1.8rem;
+        font-weight: 400;
+        color: var(--md-sys-color-on-surface);
+      }
+
+      .enrollments-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .enrollment-card {
+        mat-card-content {
+          .enrollment-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 2rem;
+
+            .course-details {
+              flex: 1;
+
+              h3 {
+                margin: 0 0 0.5rem 0;
+                font-size: 1.3rem;
+                font-weight: 500;
+                color: var(--md-sys-color-on-surface);
+              }
+
+              p {
+                margin: 0 0 1rem 0;
+                color: var(--md-sys-color-on-surface-variant);
+                font-size: 0.9rem;
+              }
+
+              .espb-info {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.25rem;
+                background-color: var(--md-sys-color-secondary-container);
+                color: var(--md-sys-color-on-secondary-container);
+                padding: 0.5rem 1rem;
+                border-radius: 16px;
+                font-size: 0.9rem;
+                font-weight: 500;
+
+                mat-icon {
+                  font-size: 1rem;
+                  width: 1rem;
+                  height: 1rem;
+                }
+              }
+            }
+
+            .enrollment-status-info {
+              display: flex;
+              flex-direction: column;
+              align-items: flex-end;
+              gap: 0.5rem;
+
+              .status-badge {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                padding: 0.5rem 1rem;
+                border-radius: 16px;
+                font-size: 0.9rem;
+                font-weight: 500;
+
+                &.pending {
+                  background-color: var(--md-sys-color-tertiary-container);
+                  color: var(--md-sys-color-on-tertiary-container);
+                }
+
+                &.approved {
+                  background-color: var(--md-sys-color-primary-container);
+                  color: var(--md-sys-color-on-primary-container);
+                }
+
+                &.rejected {
+                  background-color: var(--md-sys-color-error-container);
+                  color: var(--md-sys-color-on-error-container);
+                }
+
+                &.enrolled {
+                  background-color: var(--md-sys-color-primary-container);
+                  color: var(--md-sys-color-on-primary-container);
+                }
+
+                mat-icon {
+                  font-size: 1rem;
+                  width: 1rem;
+                  height: 1rem;
+                }
+              }
+
+              .enrollment-date {
+                margin: 0;
+                font-size: 0.8rem;
+                color: var(--md-sys-color-on-surface-variant);
+              }
+
+              .grade {
+                margin: 0.25rem 0 0 0;
+                font-size: 0.9rem;
+                font-weight: 600;
+                color: var(--md-sys-color-primary);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .prijava-ispita-container {
+    padding: 1rem;
+
+    .header h1 {
+      font-size: 2rem;
+
+      mat-icon {
+        font-size: 2rem;
+        width: 2rem;
+        height: 2rem;
+      }
+    }
+
+    .content {
+      .courses-section {
+        .section-header {
+          flex-direction: column;
+          align-items: stretch;
+
+          .search-field {
+            min-width: unset;
+            max-width: unset;
+          }
+        }
+
+        .courses-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .enrollment-card {
+        mat-card-content {
+          .enrollment-info {
+            flex-direction: column;
+            gap: 1rem;
+
+            .enrollment-status-info {
+              align-items: flex-start;
+            }
+          }
+        }
+      }
+    }
+  }
+}

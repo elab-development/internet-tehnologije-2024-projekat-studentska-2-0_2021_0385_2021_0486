@@ -1,0 +1,142 @@
+<div class="prijava-ispita-container">
+  <div class="header">
+    <h1>
+      <mat-icon>assignment_ind</mat-icon>
+      Prijava ispita
+    </h1>
+    <p class="subtitle">Odaberite predmete za koje želite da se prijavite</p>
+  </div>
+
+  <div class="content">
+    @if (isLoading()) {
+      <div class="loading-container">
+        <mat-progress-spinner diameter="50"></mat-progress-spinner>
+        <p>Učitavam predmete...</p>
+      </div>
+    } @else if (error()) {
+      <div class="error-container">
+        <mat-icon class="error-icon">error</mat-icon>
+        <p class="error-message">{{ error() }}</p>
+        <button mat-raised-button color="primary" (click)="loadCourses()">
+          <mat-icon>refresh</mat-icon>
+          Pokušaj ponovo
+        </button>
+      </div>
+    } @else {
+      <div class="courses-section">
+        <div class="section-header">
+          <h2>Dostupni predmeti</h2>
+          <mat-form-field appearance="outline" class="search-field">
+            <mat-label>Pretraži predmete</mat-label>
+            <input matInput [value]="searchTerm()" (input)="onSearchChange($event)" placeholder="Unesite naziv predmeta">
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+        </div>
+
+        @if (filteredCourses().length === 0) {
+          <div class="no-courses">
+            <mat-icon>school</mat-icon>
+            <p>Nema dostupnih predmeta</p>
+          </div>
+        } @else {
+          <div class="courses-grid">
+            @for (course of filteredCourses(); track course.id) {
+              <mat-card class="course-card" [class.enrolled]="isEnrolled(course.id)">
+                <mat-card-header>
+                  <mat-card-title>{{ course.naziv }}</mat-card-title>
+                  <mat-card-subtitle>
+                    {{ course.semestar }}. semestar • {{ course.godina }}. godina
+                  </mat-card-subtitle>
+                </mat-card-header>
+                
+                <mat-card-content>
+                  <div class="course-info">
+                    <div class="espb-badge">
+                      <mat-icon>grade</mat-icon>
+                      {{ course.espb }} ESPB
+                    </div>
+                  </div>
+                </mat-card-content>
+
+                <mat-card-actions align="end">
+                  @if (isEnrolled(course.id)) {
+                    <div class="enrollment-status">
+                      <mat-icon class="enrolled-icon">check_circle</mat-icon>
+                      <span>Prijavljen</span>
+                    </div>
+                    <button mat-stroked-button color="warn" (click)="unenrollFromCourse(course.id)"
+                            [disabled]="isProcessing()">
+                      <mat-icon>remove_circle_outline</mat-icon>
+                      Odjavi se
+                    </button>
+                  } @else {
+                    <button mat-raised-button color="primary" (click)="enrollInCourse(course.id)"
+                            [disabled]="isProcessing()">
+                      <mat-icon>add_circle_outline</mat-icon>
+                      Prijavi se
+                    </button>
+                  }
+                </mat-card-actions>
+              </mat-card>
+            }
+          </div>
+        }
+      </div>
+
+      @if (myEnrollments().length > 0) {
+        <div class="enrollments-section">
+          <h2>Moje prijave</h2>
+          <div class="enrollments-list">
+            @for (enrollment of myEnrollments(); track enrollment.id) {
+              <mat-card class="enrollment-card">
+                <mat-card-content>
+                  <div class="enrollment-info">
+                    <div class="course-details">
+                      <h3>{{ getEnrollmentCourse(enrollment)?.naziv }}</h3>
+                      <p>{{ getEnrollmentCourse(enrollment)?.semestar }}. semestar • {{ getEnrollmentCourse(enrollment)?.godina }}. godina</p>
+                      <div class="espb-info">
+                        <mat-icon>grade</mat-icon>
+                        {{ getEnrollmentCourse(enrollment)?.espb }} ESPB
+                      </div>
+                    </div>
+                    
+                    <div class="enrollment-status-info">
+                      <div class="status-badge" [class]="enrollment.status || 'enrolled'">
+                        @switch (enrollment.status) {
+                          @case ('pending') {
+                            <mat-icon>schedule</mat-icon>
+                            <span>Na čekanju</span>
+                          }
+                          @case ('approved') {
+                            <mat-icon>check_circle</mat-icon>
+                            <span>Odobreno</span>
+                          }
+                          @case ('rejected') {
+                            <mat-icon>cancel</mat-icon>
+                            <span>Odbačeno</span>
+                          }
+                          @default {
+                            <mat-icon>assignment_turned_in</mat-icon>
+                            <span>Prijavljen</span>
+                          }
+                        }
+                      </div>
+                      <p class="enrollment-date">
+                        Prijavljen: {{ formatDate(getEnrollmentDate(enrollment)) }}
+                      </p>
+                      @if (enrollment.ocena !== null && enrollment.ocena !== undefined) {
+                        <p class="grade">
+                          Ocena: {{ enrollment.ocena }}
+                        </p>
+                      }
+                    </div>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            }
+          </div>
+        </div>
+      }
+    }
+  </div>
+</div>

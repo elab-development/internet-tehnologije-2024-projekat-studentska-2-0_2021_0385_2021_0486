@@ -14,7 +14,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::apiResource('courses', CourseController::class);
     Route::apiResource('students', \App\Http\Controllers\Api\StudentController::class);
-    Route::get('/my-enrollments', [ExamEnrollmentController::class, 'myEnrollments']);
+    Route::get('/enroll', [ExamEnrollmentController::class, 'myEnrollments']);
     Route::post('/enroll', [ExamEnrollmentController::class, 'enrollToCourse']);
     Route::get('/student-confirmation-pdf', [\App\Http\Controllers\Api\StudentController::class, 'generateConfirmationPdf']);
 });
