@@ -1,0 +1,231 @@
+.uzimanje-potvrde-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  
+  .header-section {
+    .welcome-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      
+      mat-card-header {
+        mat-card-title {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          font-size: 24px;
+          font-weight: 500;
+          
+          .title-icon {
+            font-size: 32px;
+            width: 32px;
+            height: 32px;
+          }
+        }
+      }
+      
+      mat-card-content {
+        .description {
+          font-size: 16px;
+          line-height: 1.6;
+          margin: 0;
+          opacity: 0.9;
+        }
+      }
+    }
+  }
+  
+  .action-section {
+    .action-card {
+      mat-card-content {
+        .action-buttons {
+          display: flex;
+          gap: 16px;
+          margin-bottom: 16px;
+          flex-wrap: wrap;
+          
+          .generate-btn, .download-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 8px;
+            min-width: 180px;
+            justify-content: center;
+            
+            mat-spinner {
+              margin-right: 8px;
+            }
+            
+            mat-icon {
+              font-size: 20px;
+              width: 20px;
+              height: 20px;
+            }
+          }
+          
+          .generate-btn {
+            &:disabled {
+              opacity: 0.7;
+            }
+          }
+          
+          .download-btn {
+            background-color: #28a745;
+            
+            &:hover {
+              background-color: #218838;
+            }
+          }
+        }
+        
+        .error-message {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          color: #dc3545;
+          background-color: #f8d7da;
+          border: 1px solid #f5c6cb;
+          border-radius: 8px;
+          padding: 12px;
+          margin-top: 16px;
+          
+          mat-icon {
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+          }
+          
+          span {
+            font-weight: 500;
+          }
+        }
+      }
+    }
+  }
+  
+  .preview-section {
+    .preview-card {
+      mat-card-header {
+        mat-card-title {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          color: #333;
+          
+          mat-icon {
+            color: #667eea;
+          }
+        }
+      }
+      
+      mat-card-content {
+        .pdf-preview-container {
+          width: 100%;
+          height: 600px;
+          border: 2px solid #e0e0e0;
+          border-radius: 8px;
+          overflow: hidden;
+          background-color: #f5f5f5;
+          
+          .pdf-preview {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background-color: white;
+          }
+        }
+      }
+    }
+  }
+  
+  .empty-state {
+    .empty-card {
+      mat-card-content {
+        .empty-content {
+          text-align: center;
+          padding: 48px 24px;
+          color: #666;
+          
+          .empty-icon {
+            font-size: 64px;
+            width: 64px;
+            height: 64px;
+            color: #ccc;
+            margin-bottom: 16px;
+          }
+          
+          h3 {
+            margin: 16px 0 8px 0;
+            font-size: 20px;
+            font-weight: 500;
+            color: #333;
+          }
+          
+          p {
+            margin: 0;
+            font-size: 16px;
+            line-height: 1.5;
+            max-width: 400px;
+            margin: 0 auto;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .uzimanje-potvrde-container {
+    padding: 16px;
+    gap: 16px;
+    
+    .action-section {
+      .action-card {
+        mat-card-content {
+          .action-buttons {
+            flex-direction: column;
+            
+            .generate-btn, .download-btn {
+              width: 100%;
+            }
+          }
+        }
+      }
+    }
+    
+    .preview-section {
+      .preview-card {
+        mat-card-content {
+          .pdf-preview-container {
+            height: 400px;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Success snackbar styling
+::ng-deep {
+  .success-snackbar {
+    background-color: #28a745 !important;
+    color: white !important;
+  }
+  
+  .error-snackbar {
+    background-color: #dc3545 !important;
+    color: white !important;
+  }
+  
+  .warning-snackbar {
+    background-color: #ffc107 !important;
+    color: #212529 !important;
+  }
+}

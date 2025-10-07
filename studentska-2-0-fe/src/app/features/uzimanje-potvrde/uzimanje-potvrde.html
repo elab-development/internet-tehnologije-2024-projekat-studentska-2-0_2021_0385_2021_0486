@@ -1,0 +1,101 @@
+<div class="uzimanje-potvrde-container">
+  <div class="header-section">
+    <mat-card class="welcome-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon class="title-icon">description</mat-icon>
+          Uzimanje potvrde o statusu studenta
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="description">
+          Ovde možete generisati i preuzeti zvaničnu potvrdu o vašem statusu studenta.
+          Potvrda sadrži sve potrebne informacije o vašem trenutnom statusu.
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="action-section">
+    <mat-card class="action-card">
+      <mat-card-content>
+        <div class="action-buttons">
+          <button 
+            mat-raised-button 
+            color="primary" 
+            [disabled]="isLoading()"
+            (click)="generatePdf()"
+            class="generate-btn">
+            @if (isLoading()) {
+              <ng-container>
+                <mat-spinner diameter="20" color="primary"></mat-spinner>
+                <span>Generišem potvrdu...</span>
+              </ng-container>
+            } @else {
+              <ng-container>
+                <mat-icon>picture_as_pdf</mat-icon>
+                <span>Generiši potvrdu</span>
+              </ng-container>
+            }
+          </button>
+
+          @if (pdfUrl() && !hasError()) {
+            <button 
+              mat-raised-button 
+              color="accent" 
+              (click)="downloadPdf()"
+              class="download-btn">
+              <ng-container>
+                <mat-icon>download</mat-icon>
+                <span>Preuzmi PDF</span>
+              </ng-container>
+            </button>
+          }
+        </div>
+
+        @if (hasError()) {
+          <div class="error-message">
+            <mat-icon color="warn">error</mat-icon>
+            <span>Došlo je do greške pri generisanju potvrde. Pokušajte ponovo.</span>
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  @if (pdfUrl() && !hasError()) {
+    <div class="preview-section">
+      <mat-card class="preview-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>preview</mat-icon>
+            Pregled potvrde
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="pdf-preview-container">
+            <iframe 
+              [src]="pdfUrl()" 
+              class="pdf-preview"
+              title="Pregled studentske potvrde">
+            </iframe>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
+
+  @if (!pdfUrl() && !isLoading() && !hasError()) {
+    <div class="empty-state">
+      <mat-card class="empty-card">
+        <mat-card-content>
+          <div class="empty-content">
+            <mat-icon class="empty-icon">description</mat-icon>
+            <h3>Nema generisane potvrde</h3>
+            <p>Kliknite na dugme "Generiši potvrdu" da biste kreirali vašu studentsku potvrdu.</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
+</div>
