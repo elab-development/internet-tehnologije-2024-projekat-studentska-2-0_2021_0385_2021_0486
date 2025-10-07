@@ -2,9 +2,9 @@ export type Role = 'student' | 'admin';
 
 export interface NavItem {
   label: string;
-  path: string; // relative to /app
+  path: string; 
   icon?: string;
-  roles?: Role[]; // omit => visible to all authenticated users
+  roles?: Role[];
 }
 
 export const NAV_ITEMS: NavItem[] = [

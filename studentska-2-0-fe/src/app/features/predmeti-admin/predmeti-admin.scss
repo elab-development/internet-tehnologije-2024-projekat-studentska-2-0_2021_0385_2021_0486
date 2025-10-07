@@ -1,0 +1,442 @@
+.predmeti-admin-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  position: relative;
+
+  .header-section {
+    .welcome-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+
+      mat-card-header {
+        mat-card-title {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          font-size: 28px;
+          font-weight: 600;
+
+          .title-icon {
+            font-size: 36px;
+            width: 36px;
+            height: 36px;
+          }
+        }
+
+        mat-card-subtitle {
+          color: rgba(255, 255, 255, 0.8);
+          font-size: 16px;
+          margin-top: 8px;
+        }
+      }
+
+      mat-card-actions {
+        padding: 16px 24px 24px;
+        display: flex;
+        gap: 12px;
+
+        button {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-weight: 500;
+          border-radius: 8px;
+
+          &[color="primary"] {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+
+            &:hover {
+              background-color: rgba(255, 255, 255, 0.3);
+            }
+          }
+
+          mat-icon {
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+          }
+        }
+      }
+    }
+  }
+
+  .content-section {
+    max-height: 500px;
+    .table-card {
+      mat-card-header {
+        mat-card-title {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          color: #333;
+          font-size: 20px;
+
+          mat-icon {
+            color: #667eea;
+            font-size: 24px;
+            width: 24px;
+            height: 24px;
+          }
+        }
+      }
+
+      mat-card-content {
+        padding: 0;
+
+        .loading-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 48px;
+          gap: 16px;
+
+          p {
+            color: #666;
+            font-size: 16px;
+            margin: 0;
+          }
+        }
+
+        .empty-state {
+          text-align: center;
+          padding: 64px 24px;
+          color: #666;
+
+          .empty-icon {
+            font-size: 64px;
+            width: 64px;
+            height: 64px;
+            color: #ddd;
+            margin-bottom: 16px;
+          }
+
+          h3 {
+            font-size: 20px;
+            font-weight: 500;
+            color: #333;
+            margin: 16px 0 8px 0;
+          }
+
+          p {
+            font-size: 16px;
+            line-height: 1.5;
+            margin: 0;
+          }
+        }
+
+        .table-container {
+          overflow-x: auto;
+
+          .courses-table {
+            width: 100%;
+            background: white;
+
+            th {
+              background-color: #f8f9fa;
+              font-weight: 600;
+              color: #333;
+              border-bottom: 2px solid #e9ecef;
+            }
+
+            td {
+              border-bottom: 1px solid #e9ecef;
+
+              &.naziv-cell {
+                font-size: 16px;
+
+                strong {
+                  color: #333;
+                }
+              }
+            }
+
+            .sifra-badge {
+              display: inline-block;
+              padding: 4px 8px;
+              background-color: #e3f2fd;
+              color: #1976d2;
+              border-radius: 12px;
+              font-size: 12px;
+              font-weight: 500;
+            }
+
+            .espb-badge {
+              display: inline-block;
+              padding: 4px 8px;
+              background-color: #e8f5e8;
+              color: #2e7d32;
+              border-radius: 12px;
+              font-size: 12px;
+              font-weight: 600;
+            }
+
+            .semester-badge {
+              display: inline-block;
+              padding: 4px 8px;
+              background-color: #fff3e0;
+              color: #f57c00;
+              border-radius: 12px;
+              font-size: 12px;
+              font-weight: 500;
+            }
+
+            .year-badge {
+              display: inline-block;
+              padding: 4px 8px;
+              background-color: #f3e5f5;
+              color: #7b1fa2;
+              border-radius: 12px;
+              font-size: 12px;
+              font-weight: 500;
+            }
+
+            .actions-container {
+              display: flex;
+              gap: 4px;
+
+              .action-btn {
+                border-radius: 50%;
+                width: 36px;
+                height: 36px;
+
+                &.detail-btn {
+                  color: #2196f3;
+
+                  &:hover {
+                    background-color: #e3f2fd;
+                  }
+                }
+
+                &.edit-btn {
+                  color: #ff9800;
+
+                  &:hover {
+                    background-color: #fff3e0;
+                  }
+                }
+
+                &.delete-btn {
+                  color: #f44336;
+
+                  &:hover {
+                    background-color: #ffebee;
+                  }
+                }
+
+                mat-icon {
+                  font-size: 20px;
+                  width: 20px;
+                  height: 20px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Details Sidebar
+  .details-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    justify-content: flex-end;
+    align-items: stretch;
+
+    .details-sidebar {
+      width: 400px;
+      background: white;
+      box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      animation: slideIn 0.3s ease-out;
+
+      .details-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px;
+        border-bottom: 1px solid #e0e0e0;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+
+        h2 {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin: 0;
+          font-size: 20px;
+          font-weight: 500;
+
+          mat-icon {
+            font-size: 24px;
+            width: 24px;
+            height: 24px;
+          }
+        }
+
+        button {
+          color: white;
+
+          &:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+          }
+        }
+      }
+
+      .details-content {
+        flex: 1;
+        padding: 24px;
+        overflow-y: auto;
+
+        .detail-item {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+          margin-bottom: 16px;
+          padding-bottom: 16px;
+          border-bottom: 1px solid #f0f0f0;
+
+          &:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+          }
+
+          label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+          }
+
+          span {
+            font-size: 16px;
+            color: #333;
+            font-weight: 500;
+          }
+        }
+      }
+
+      .details-actions {
+        padding: 24px;
+        border-top: 1px solid #e0e0e0;
+        display: flex;
+        gap: 12px;
+
+        button {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          padding: 12px;
+          border-radius: 8px;
+          font-weight: 500;
+
+          mat-icon {
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .predmeti-admin-container {
+    padding: 16px;
+    gap: 16px;
+
+    .header-section .welcome-card mat-card-actions {
+      flex-direction: column;
+      gap: 8px;
+
+      button {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    .content-section .table-card mat-card-content .table-container {
+      .courses-table {
+        font-size: 14px;
+
+        .actions-container {
+          flex-direction: column;
+          gap: 2px;
+
+          .action-btn {
+            width: 32px;
+            height: 32px;
+
+            mat-icon {
+              font-size: 18px;
+              width: 18px;
+              height: 18px;
+            }
+          }
+        }
+      }
+    }
+
+    .details-overlay .details-sidebar {
+      width: 100%;
+      max-width: 400px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .predmeti-admin-container {
+    padding: 12px;
+
+    .details-overlay .details-sidebar {
+      width: 100vw;
+    }
+  }
+}
+
+// Global snackbar styles
+::ng-deep {
+  .success-snackbar {
+    background-color: #4caf50 !important;
+    color: white !important;
+  }
+
+  .error-snackbar {
+    background-color: #f44336 !important;
+    color: white !important;
+  }
+
+  .warning-snackbar {
+    background-color: #ff9800 !important;
+    color: white !important;
+  }
+}
