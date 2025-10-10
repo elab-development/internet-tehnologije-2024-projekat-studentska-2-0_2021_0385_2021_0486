@@ -12,9 +12,11 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSelectModule } from '@angular/material/select';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { CourseService } from '../../services/course.service';
-import { Course, CreateCoursePayload, UpdateCoursePayload } from '../../models/course.model';
-import { catchError, finalize, of } from 'rxjs';
+import { Course, CreateCoursePayload, UpdateCoursePayload, CourseSearchParams, CourseSearchResponse } from '../../models/course.model';
+import { catchError, finalize, of, debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
   selector: 'app-predmeti-admin',
@@ -32,6 +34,8 @@ import { catchError, finalize, of } from 'rxjs';
     MatSnackBarModule,
     MatMenuModule,
     MatTooltipModule,
+    MatSelectModule,
+    MatPaginatorModule,
     ReactiveFormsModule
   ],
   templateUrl: './predmeti-admin.html',
@@ -46,16 +50,48 @@ export class PredmetiAdmin implements OnInit {
 
   // Signals for state management
   readonly courses = signal<Course[]>([]);
+  readonly searchResponse = signal<CourseSearchResponse | null>(null);
   readonly isLoading = signal(false);
   readonly isCreating = signal(false);
   readonly selectedCourse = signal<Course | null>(null);
   readonly showDetails = signal(false);
 
+  // Search form
+  searchForm: FormGroup = this.fb.group({
+    naziv: [''],
+    sifra_predmeta: [''],
+    espb: [''],
+    semestar: [''],
+    godina: [''],
+    sort_by: ['naziv'],
+    sort_order: ['asc']
+  });
+
+  // Current search parameters
+  private currentSearchParams: CourseSearchParams = {
+    page: 1,
+    per_page: 15,
+    sort_by: 'naziv',
+    sort_order: 'asc'
+  };
+
   // Table configuration
   readonly displayedColumns = ['naziv', 'sifra', 'espb', 'semestar', 'godina', 'actions'];
 
   ngOnInit(): void {
-    this.loadCourses();
+    this.searchCourses();
+    this.setupSearchFormSubscription();
+  }
+
+  private setupSearchFormSubscription(): void {
+    // Auto-search when naziv or sifra_predmeta changes
+    this.searchForm.get('naziv')?.valueChanges
+      .pipe(debounceTime(500), distinctUntilChanged())
+      .subscribe(() => this.searchCourses());
+      
+    this.searchForm.get('sifra_predmeta')?.valueChanges
+      .pipe(debounceTime(500), distinctUntilChanged())
+      .subscribe(() => this.searchCourses());
   }
 
   onTableScroll(event: Event): void {
@@ -67,24 +103,68 @@ export class PredmetiAdmin implements OnInit {
     }
   }
 
-  loadCourses(): void {
+  searchCourses(): void {
     this.isLoading.set(true);
     
-    this.courseService.getCourses()
+    // Build search parameters from form
+    const formValues = this.searchForm.value;
+    const searchParams: CourseSearchParams = {
+      ...this.currentSearchParams,
+      naziv: formValues.naziv || undefined,
+      sifra_predmeta: formValues.sifra_predmeta || undefined,
+      espb: formValues.espb || undefined,
+      semestar: formValues.semestar || undefined,
+      godina: formValues.godina || undefined,
+      sort_by: formValues.sort_by || 'naziv',
+      sort_order: formValues.sort_order || 'asc'
+    };
+    
+    this.courseService.searchCourses(searchParams)
       .pipe(
         catchError(error => {
-          console.error('Error loading courses:', error);
-          this.snackBar.open('Greška pri učitavanju kurseva', 'Zatvori', {
+          console.error('Error searching courses:', error);
+          this.snackBar.open('Greška pri pretragama kurseva', 'Zatvori', {
             duration: 5000,
             panelClass: ['error-snackbar']
           });
-          return of([]);
+          return of(null);
         }),
         finalize(() => this.isLoading.set(false))
       )
-      .subscribe(courses => {
-        this.courses.set(courses);
+      .subscribe(response => {
+        if (response) {
+          this.searchResponse.set(response);
+          this.courses.set(response.data);
+        }
       });
+  }
+
+  clearFilters(): void {
+    this.searchForm.reset({
+      naziv: '',
+      sifra_predmeta: '',
+      espb: '',
+      semestar: '',
+      godina: '',
+      sort_by: 'naziv',
+      sort_order: 'asc'
+    });
+    this.currentSearchParams = {
+      page: 1,
+      per_page: 15,
+      sort_by: 'naziv',
+      sort_order: 'asc'
+    };
+    this.searchCourses();
+  }
+
+  onPageChange(event: PageEvent): void {
+    this.currentSearchParams = {
+      ...this.currentSearchParams,
+      page: event.pageIndex + 1,
+      per_page: event.pageSize
+    };
+    this.searchCourses();
   }
 
   openCreateDialog(): void {
@@ -144,7 +224,7 @@ export class PredmetiAdmin implements OnInit {
             duration: 3000,
             panelClass: ['success-snackbar']
           });
-          this.loadCourses();
+          this.searchCourses();
         }
       });
   }
@@ -167,7 +247,7 @@ export class PredmetiAdmin implements OnInit {
             duration: 3000,
             panelClass: ['success-snackbar']
           });
-          this.loadCourses();
+          this.searchCourses();
           this.closeDetails();
         }
       });
@@ -175,26 +255,25 @@ export class PredmetiAdmin implements OnInit {
 
   deleteCourse(course: Course): void {
     if (confirm(`Da li ste sigurni da želite da obrišete kurs "${course.naziv}"?`)) {
-      this.courseService.deleteCourse(course.id)
+      this.courseService
+        .deleteCourse(course.id)
         .pipe(
-          catchError(error => {
+          catchError((error) => {
             console.error('Error deleting course:', error);
             this.snackBar.open('Greška pri brisanju kursa', 'Zatvori', {
               duration: 5000,
-              panelClass: ['error-snackbar']
+              panelClass: ['error-snackbar'],
             });
             return of(null);
           })
         )
-        .subscribe(response => {
-          if (response) {
-            this.snackBar.open('Kurs je uspešno obrisan!', 'Zatvori', {
-              duration: 3000,
-              panelClass: ['success-snackbar']
-            });
-            this.loadCourses();
-            this.closeDetails();
-          }
+        .subscribe(() => {
+          this.snackBar.open('Kurs je uspešno obrisan!', 'Zatvori', {
+            duration: 3000,
+            panelClass: ['success-snackbar'],
+          });
+          this.searchCourses();
+          this.closeDetails();
         });
     }
   }
@@ -216,6 +295,14 @@ export class PredmetiAdmin implements OnInit {
           <input matInput formControlName="naziv" placeholder="Unesite naziv kursa">
           <mat-error *ngIf="courseForm.get('naziv')?.hasError('required')">
             Naziv kursa je obavezan
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Šifra predmeta</mat-label>
+          <input matInput formControlName="sifra_predmeta" placeholder="Unesite šifru predmeta">
+          <mat-error *ngIf="courseForm.get('sifra_predmeta')?.hasError('required')">
+            Šifra predmeta je obavezna
           </mat-error>
         </mat-form-field>
 
@@ -243,11 +330,11 @@ export class PredmetiAdmin implements OnInit {
 
         <mat-form-field>
           <mat-label>Godina studija</mat-label>
-          <input matInput type="number" formControlName="godina" placeholder="Godina studija">
-          <mat-error *ngIf="courseForm.get('godina')?.hasError('required')">
+          <input matInput type="number" formControlName="godina_studija" placeholder="Godina studija">
+          <mat-error *ngIf="courseForm.get('godina_studija')?.hasError('required')">
             Godina je obavezna
           </mat-error>
-          <mat-error *ngIf="courseForm.get('godina')?.hasError('min') || courseForm.get('godina')?.hasError('max')">
+          <mat-error *ngIf="courseForm.get('godina_studija')?.hasError('min') || courseForm.get('godina_studija')?.hasError('max')">
             Godina mora biti između 1 i 4
           </mat-error>
         </mat-form-field>
@@ -302,6 +389,7 @@ export class CourseFormDialog {
   
   courseForm: FormGroup = this.fb.group({
     naziv: ['', [Validators.required]],
+    sifra_predmeta: ['', [Validators.required]],
     espb: ['', [Validators.required, Validators.min(1)]],
     semestar: ['', [Validators.required, Validators.min(1), Validators.max(8)]],
     godina: ['', [Validators.required, Validators.min(1), Validators.max(4)]]
@@ -311,6 +399,7 @@ export class CourseFormDialog {
     if (this.data.mode === 'edit' && this.data.course) {
       this.courseForm.patchValue({
         naziv: this.data.course.naziv,
+        sifra_predmeta: this.data.course.sifra,
         espb: this.data.course.espb,
         semestar: this.data.course.semestar,
         godina: this.data.course.godina

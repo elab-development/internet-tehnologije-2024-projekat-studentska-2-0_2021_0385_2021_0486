@@ -12,6 +12,8 @@ class CourseFactory extends Factory
             'naziv' => fake()->unique()->sentence(3), 
             'sifra_predmeta' => fake()->unique()->bothify('??###'),
             'espb' => fake()->numberBetween(4, 8),
+            'semestar' => fake()->numberBetween(1, 8),
+            'godina' => fake()->numberBetween(1, 4),
         ];
     }
 }

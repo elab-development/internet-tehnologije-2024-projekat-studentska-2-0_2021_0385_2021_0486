@@ -12,8 +12,10 @@ class CourseResource extends JsonResource
         return [
             'id' => $this->id,
             'naziv' => $this->naziv,
-            'sifra' => $this->sifra_predmeta, // Preimenovanje
+            'sifra' => $this->sifra_predmeta,
             'espb' => $this->espb,
+            'semestar' => $this->semestar,
+            'godina' => $this->godina,
         ];
     }
 }

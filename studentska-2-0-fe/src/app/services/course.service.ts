@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Course, CreateCoursePayload, UpdateCoursePayload } from '../models/course.model';
+import { Course, CreateCoursePayload, UpdateCoursePayload, CourseSearchParams, CourseSearchResponse } from '../models/course.model';
 import { API_BASE } from '../constants/api-base';
 
 @Injectable({ providedIn: 'root' })
@@ -14,11 +14,9 @@ export class CourseService {
     console.log('Making GET request to:', this.baseUrl);
     return this.http.get<Course[] | { data: Course[] }>(this.baseUrl).pipe(
       map((response: Course[] | { data: Course[] }) => {
-        // Handle Laravel resource format
         if (response && typeof response === 'object' && 'data' in response) {
           return response.data;
         }
-        // Handle direct array format
         return Array.isArray(response) ? response : [];
       })
     );
@@ -38,5 +36,14 @@ export class CourseService {
 
   deleteCourse(id: number): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(`${this.baseUrl}/${id}`);
+  }
+
+  searchCourses(params: CourseSearchParams = {}): Observable<CourseSearchResponse> {
+    // Remove empty/null/undefined values from params
+    const cleanParams = Object.fromEntries(
+      Object.entries(params).filter(([_, value]) => value !== null && value !== undefined && value !== '')
+    );
+
+    return this.http.get<CourseSearchResponse>(`${this.baseUrl}/search`, { params: cleanParams });
   }
 }
