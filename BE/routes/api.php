@@ -13,7 +13,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('courses/search', [CourseController::class, 'search']);
-    Route::apiResource('courses', CourseController::class);
+    Route::apiResourcgite('courses', CourseController::class);
     Route::apiResource('students', \App\Http\Controllers\Api\StudentController::class);
     Route::get('/enroll', [ExamEnrollmentController::class, 'myEnrollments']);
     Route::post('/enroll', [ExamEnrollmentController::class, 'enrollToCourse']);

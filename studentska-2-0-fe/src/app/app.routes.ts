@@ -8,10 +8,12 @@ import { PrijavaIspita } from './features/prijava-ispita/prijava-ispita';
 import { UzimanjePotvrde } from './features/uzimanje-potvrde/uzimanje-potvrde';
 import { PredmetiAdmin } from './features/predmeti-admin/predmeti-admin';
 import { KontaktStranica } from './features/kontakt-stranica/kontakt-stranica';
+import { ONama } from './features/o-nama/o-nama';
 
 export const routes: Routes = [
 	{ path: 'login', component: Login },
 	{ path: 'register', component: Register },
+	{ path: 'o-nama', component: ONama },
 
 	{
 		path: 'app',

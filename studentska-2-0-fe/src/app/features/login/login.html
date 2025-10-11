@@ -31,10 +31,11 @@
 			</form>
 		</mat-card-content>
 		<mat-card-actions align="end">
-			<a mat-button routerLink="/register">Nemaš nalog? Registruj se</a>
+			<a mat-button routerLink="/o-nama">O nama</a>
 			<button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="submitting() || form.invalid">
 				Prijavi se
 			</button>
 		</mat-card-actions>
+		<a mat-button routerLink="/register">Nemaš nalog? Registruj se</a>
 	</mat-card>
 </div>
