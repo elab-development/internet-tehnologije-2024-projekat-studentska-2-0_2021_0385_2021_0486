@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { CourseService, ExamEnrollmentService } from '../../services';
 import { Course, ExamEnrollment } from '../../models';
 import { catchError, finalize, forkJoin, of } from 'rxjs';
+import { SerbianDatePipe } from '../../pipes';
 
 @Component({
   selector: 'app-prijava-ispita',
@@ -19,7 +20,8 @@ import { catchError, finalize, forkJoin, of } from 'rxjs';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    SerbianDatePipe
   ],
   templateUrl: './prijava-ispita.html',
   styleUrl: './prijava-ispita.scss',
@@ -45,10 +47,6 @@ export class PrijavaIspita implements OnInit {
     return this.courses().filter(course => 
       course.naziv.toLowerCase().includes(term)
     );
-  });
-
-  readonly myEnrollments = computed(() => {
-    return this.enrollments().filter(enrollment => enrollment.kurs || enrollment.course);
   });
 
   ngOnInit(): void {
@@ -100,8 +98,8 @@ export class PrijavaIspita implements OnInit {
 
   isEnrolled(courseId: number): boolean {
     return this.enrollments().some(enrollment => {
-      const enrollmentCourseId = enrollment.kurs?.id || enrollment.course?.id || enrollment.course_id;
-      return enrollmentCourseId === courseId && (enrollment.status !== 'rejected' || !enrollment.status);
+      const enrollmentCourseId = enrollment.kurs?.id;
+      return enrollmentCourseId === courseId;
     });
   }
 
@@ -124,8 +122,7 @@ export class PrijavaIspita implements OnInit {
           
           const newEnrollment: ExamEnrollment = {
             ...enrollment,
-            kurs: course, // Use kurs to match backend
-            course: course // Keep for backward compatibility
+            kurs: course, 
           };
           
           this.enrollments.set([...currentEnrollments, newEnrollment]);
@@ -160,7 +157,7 @@ export class PrijavaIspita implements OnInit {
     if (this.isProcessing()) return;
 
     const enrollment = this.enrollments().find(e => {
-      const enrollmentCourseId = e.kurs?.id || e.course?.id || e.course_id;
+      const enrollmentCourseId = e.kurs?.id;
       return enrollmentCourseId === courseId;
     });
     if (!enrollment) return;
@@ -193,10 +190,10 @@ export class PrijavaIspita implements OnInit {
   }
 
   getEnrollmentCourse(enrollment: ExamEnrollment): Course | undefined {
-    return enrollment.kurs || enrollment.course;
+    return enrollment.kurs;
   }
 
   getEnrollmentDate(enrollment: ExamEnrollment): string {
-    return enrollment.datumPrijave || enrollment.datum_prijave || '';
+    return enrollment.datumPrijave || '';
   }
 }
