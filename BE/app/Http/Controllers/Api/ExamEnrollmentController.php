@@ -68,4 +68,31 @@ class ExamEnrollmentController extends Controller
             'enrollment' => $enrollment
         ], 201);
     }
+
+    public function unenrollFromCourse($id)
+    {
+        if (!$this->isStudent()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $student = Auth::user();
+
+        $enrollment = ExamEnrollment::where('id', $id)
+                                   ->where('student_id', $student->id)
+                                   ->first();
+
+        if (!$enrollment) {
+            return response()->json(['message' => 'Prijava na ispit nije pronađena ili ne pripada vašem nalogu.'], 404);
+        }
+
+        if ($enrollment->ocena !== null) {
+            return response()->json(['message' => 'Ne možete se odjaviti sa ispita koji je već ocenjen.'], 422);
+        }
+
+        $enrollment->delete();
+
+        return response()->json([
+            'message' => 'Uspešno ste se odjavili sa ispita.'
+        ], 200);
+    }
 }
