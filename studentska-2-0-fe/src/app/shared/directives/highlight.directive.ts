@@ -1,10 +1,10 @@
-import { Directive, ElementRef, HostListener, input, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, HostListener, input, Renderer2, inject, OnInit } from '@angular/core';
 
 @Directive({
   selector: '[appHighlight]',
   standalone: true
 })
-export class HighlightDirective {
+export class HighlightDirective implements OnInit {
   // Konfiguracija boja
   highlightColor = input<string>('#e3f2fd');
   originalColor = input<string>('');
@@ -15,10 +15,8 @@ export class HighlightDirective {
   private originalTransform = '';
   private originalTransition = '';
 
-  constructor(
-    private el: ElementRef,
-    private renderer: Renderer2
-  ) {}
+  private el = inject(ElementRef);
+  private renderer = inject(Renderer2);
 
   ngOnInit() {
     // Čuva originalne stilove

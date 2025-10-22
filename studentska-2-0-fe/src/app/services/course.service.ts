@@ -41,7 +41,7 @@ export class CourseService {
   searchCourses(params: CourseSearchParams = {}): Observable<CourseSearchResponse> {
     // Remove empty/null/undefined values from params
     const cleanParams = Object.fromEntries(
-      Object.entries(params).filter(([_, value]) => value !== null && value !== undefined && value !== '')
+      Object.entries(params).filter(([, value]) => value !== null && value !== undefined && value !== '')
     );
 
     return this.http.get<CourseSearchResponse>(`${this.baseUrl}/search`, { params: cleanParams });

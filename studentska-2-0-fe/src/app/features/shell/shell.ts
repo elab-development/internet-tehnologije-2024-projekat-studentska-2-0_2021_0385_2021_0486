@@ -60,7 +60,7 @@ export class Shell {
 
   visibleItems = computed(() => {
     const u = this.userSig();
-    const role = u?.uloga as any;
-    return NAV_ITEMS.filter((i) => !i.roles || (role && i.roles.includes(role)));
+    const role = u?.uloga;
+    return NAV_ITEMS.filter((i) => !i.roles || (role && i.roles.includes(role as 'student' | 'admin')));
   });
 }

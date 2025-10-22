@@ -281,7 +281,7 @@ export class PredmetiAdmin implements OnInit {
 
 // Course Form Dialog Component
 @Component({
-  selector: 'course-form-dialog',
+  selector: 'app-course-form-dialog',
   template: `
     <h2 mat-dialog-title>
       <mat-icon>{{ data.mode === 'create' ? 'add' : 'edit' }}</mat-icon>

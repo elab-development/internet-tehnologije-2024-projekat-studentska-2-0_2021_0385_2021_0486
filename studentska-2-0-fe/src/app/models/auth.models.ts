@@ -1,18 +1,18 @@
-export type RegisterPayload = {
+export interface RegisterPayload {
   ime: string;
   prezime: string;
   broj_indeksa: string;
   email: string;
   password: string;
   password_confirmation: string;
-};
+}
 
-export type LoginPayload = {
+export interface LoginPayload {
   email: string;
   password: string;
-};
+}
 
-export type Student = {
+export interface Student {
   id?: number;
   ime: string;
   prezime: string;
@@ -20,15 +20,15 @@ export type Student = {
   email: string;
   status?: string;
   uloga?: string; // role
-};
+}
 
-export type LoginResponse = {
+export interface LoginResponse {
   access_token: string;
   token_type: 'Bearer';
   student: Student;
-};
+}
 
-export type RegisterResponse = {
+export interface RegisterResponse {
   message: string;
   student: Student;
-};
+}

@@ -1,5 +1,4 @@
 import { Course } from './course.model';
-import { Student } from './auth.models';
 
 export interface ExamEnrollment {
   id: number;

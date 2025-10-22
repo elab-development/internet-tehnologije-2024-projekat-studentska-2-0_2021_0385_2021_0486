@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ExamEnrollment, CreateExamEnrollmentPayload, UpdateExamEnrollmentPayload } from '../models/exam-enrollment.model';
 import { API_BASE } from '../constants/api-base';
