@@ -42,6 +42,31 @@
 	p {
 		margin: 0;
 		font-size: 1rem;
-		line-height: 1.6;
+		line-height: 1.5;
+	}
+}
+
+.actions-section {
+	margin-top: 2rem;
+	
+	h2 {
+		margin-bottom: 1.5rem;
+		color: var(--mat-sys-on-surface);
+		font-size: 1.5rem;
+		font-weight: 500;
+	}
+	
+	.quick-actions {
+		display: flex;
+		gap: 1rem;
+		flex-wrap: wrap;
+		
+		@media (max-width: 768px) {
+			flex-direction: column;
+			
+			app-action-button {
+				width: 100%;
+			}
+		}
 	}
 }

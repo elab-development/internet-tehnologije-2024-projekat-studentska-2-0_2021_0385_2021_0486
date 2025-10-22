@@ -7,79 +7,98 @@
 		<mat-card-content>
 			<form [formGroup]="form" (ngSubmit)="onSubmit()" class="form">
 				<div class="row">
-					<mat-form-field>
-						<mat-label>Ime</mat-label>
-						<input matInput formControlName="ime" required />
-						@if (form.controls.ime.touched && form.controls.ime.invalid) {
-							<mat-error>Ime je obavezno.</mat-error>
-						}
-						@if (serverErrors()['ime'] && serverErrors()['ime'].length) {
-							<mat-error>{{ serverErrors()['ime'][0] }}</mat-error>
-						}
-					</mat-form-field>
+					<app-form-field 
+						[control]="form.controls.ime"
+						label="Ime"
+						fieldName="ime"
+						[required]="true"
+						[serverErrors]="serverErrors()"
+						[errorMessages]="{
+							'required': 'Ime je obavezno.',
+							'maxlength': 'Ime može imati najviše 100 karaktera.'
+						}">
+					</app-form-field>
 
-					<mat-form-field>
-						<mat-label>Prezime</mat-label>
-						<input matInput formControlName="prezime" required />
-						@if (form.controls.prezime.touched && form.controls.prezime.invalid) {
-							<mat-error>Prezime je obavezno.</mat-error>
-						}
-						@if (serverErrors()['prezime'] && serverErrors()['prezime'].length) {
-							<mat-error>{{ serverErrors()['prezime'][0] }}</mat-error>
-						}
-					</mat-form-field>
+					<app-form-field 
+						[control]="form.controls.prezime"
+						label="Prezime"
+						fieldName="prezime"
+						[required]="true"
+						[serverErrors]="serverErrors()"
+						[errorMessages]="{
+							'required': 'Prezime je obavezno.',
+							'maxlength': 'Prezime može imati najviše 100 karaktera.'
+						}">
+					</app-form-field>
 				</div>
 
-				<mat-form-field>
-					<mat-label>Broj indeksa</mat-label>
-					<input matInput formControlName="broj_indeksa" required />
-					@if (form.controls.broj_indeksa.touched && form.controls.broj_indeksa.invalid) {
-						<mat-error>Broj indeksa je obavezan.</mat-error>
-					}
-					@if (serverErrors()['broj_indeksa'] && serverErrors()['broj_indeksa'].length) {
-						<mat-error>{{ serverErrors()['broj_indeksa'][0] }}</mat-error>
-					}
-				</mat-form-field>
+				<app-form-field 
+					[control]="form.controls.broj_indeksa"
+					label="Broj indeksa"
+					fieldName="broj_indeksa"
+					[required]="true"
+					[serverErrors]="serverErrors()"
+					[errorMessages]="{
+						'required': 'Broj indeksa je obavezan.',
+						'maxlength': 'Broj indeksa može imati najviše 50 karaktera.'
+					}">
+				</app-form-field>
 
-				<mat-form-field>
-					<mat-label>Email</mat-label>
-					<input matInput type="email" formControlName="email" required />
-					@if (form.controls.email.touched && form.controls.email.invalid) {
-						<mat-error>Unesite validan email.</mat-error>
-					}
-					@if (serverErrors()['email'] && serverErrors()['email'].length) {
-						<mat-error>{{ serverErrors()['email'][0] }}</mat-error>
-					}
-				</mat-form-field>
+				<app-form-field 
+					[control]="form.controls.email"
+					label="Email"
+					type="email"
+					fieldName="email"
+					[required]="true"
+					[serverErrors]="serverErrors()"
+					[errorMessages]="{
+						'required': 'Email je obavezan.',
+						'email': 'Unesite validan email.'
+					}">
+				</app-form-field>
 
 				<div class="row">
-					<mat-form-field>
-						<mat-label>Lozinka</mat-label>
-						<input matInput type="password" formControlName="password" required />
-						@if (form.controls.password.touched && form.controls.password.invalid) {
-							<mat-error>Lozinka mora imati najmanje 8 karaktera.</mat-error>
-						}
-						@if (serverErrors()['password'] && serverErrors()['password'].length) {
-							<mat-error>{{ serverErrors()['password'][0] }}</mat-error>
-						}
-					</mat-form-field>
+					<app-form-field 
+						[control]="form.controls.password"
+						label="Lozinka"
+						type="password"
+						fieldName="password"
+						[required]="true"
+						[serverErrors]="serverErrors()"
+						[errorMessages]="{
+							'required': 'Lozinka je obavezna.',
+							'minlength': 'Lozinka mora imati najmanje 8 karaktera.'
+						}">
+					</app-form-field>
 
-					<mat-form-field>
-						<mat-label>Potvrda lozinke</mat-label>
-						<input matInput type="password" formControlName="password_confirmation" required />
-						@if (form.controls.password_confirmation.touched && form.controls.password_confirmation.invalid) {
-							<mat-error>Potrebno je potvrditi lozinku.</mat-error>
-						}
-					</mat-form-field>
+					<app-form-field 
+						[control]="form.controls.password_confirmation"
+						label="Potvrda lozinke"
+						type="password"
+						fieldName="password_confirmation"
+						[required]="true"
+						[serverErrors]="serverErrors()"
+						[errorMessages]="{
+							'required': 'Potrebno je potvrditi lozinku.'
+						}">
+					</app-form-field>
 				</div>
 			</form>
 		</mat-card-content>
 		<mat-card-actions align="end">
-			<a mat-button routerLink="/o-nama">O nama</a>
-			<button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="submitting() || form.invalid">
-				Registruj se
-			</button>
+			<a mat-button routerLink="/o-nama" appHighlight [highlightColor]="'#f0f4ff'">O nama</a>
+			<app-action-button 
+				text="Registruj se"
+				type="submit"
+				variant="raised"
+				color="primary"
+				icon="person_add"
+				loadingText="Registracija u toku..."
+				[loading]="submitting()"
+				[disabled]="form.invalid"
+				(clicked)="onSubmit()">
+			</app-action-button>
 		</mat-card-actions>
-		<a mat-button routerLink="/login">Već imaš nalog? Prijavi se</a>
+		<a mat-button routerLink="/login" appHighlight [highlightColor]="'#f0f4ff'">Već imaš nalog? Prijavi se</a>
 	</mat-card>
 </div>

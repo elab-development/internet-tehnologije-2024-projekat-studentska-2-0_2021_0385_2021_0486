@@ -25,7 +25,7 @@ export const routes: Routes = [
 			{ path: 'prijava-ispita', component: PrijavaIspita, canActivate: [roleGuard], data: { roles: ['student'] } },
 			{ path: 'uzimanje-potvrde', component: UzimanjePotvrde, canActivate: [roleGuard], data: { roles: ['student'] } },
 			{ path: 'predmeti-admin', component: PredmetiAdmin, canActivate: [roleGuard], data: { roles: ['admin'] } },
-			{ path: 'kontakt', component: KontaktStranica },
+			{ path: 'kontakt', component: KontaktStranica, canActivate: [roleGuard], },
 		],
 	},
 

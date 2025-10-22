@@ -4,10 +4,12 @@ import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../services/auth.service';
+import { ActionButtonComponent } from '../../shared/components';
+import { HighlightDirective } from '../../shared/directives';
 
 @Component({
   selector: 'app-welcome',
-  imports: [MatButtonModule, MatIconModule],
+  imports: [MatButtonModule, MatIconModule, ActionButtonComponent, HighlightDirective],
   templateUrl: './welcome.html',
   styleUrl: './welcome.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,5 +25,9 @@ export class Welcome {
   onLogout() {
     this.auth.logout();
     this.router.navigateByUrl('/login');
+  }
+
+  navigateTo(route: string) {
+    this.router.navigateByUrl(route);
   }
 }

@@ -7,6 +7,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { StudentService } from '../../services/student.service';
 import { catchError, finalize, of } from 'rxjs';
+import { ActionButtonComponent } from '../../shared/components';
 
 @Component({
   selector: 'app-uzimanje-potvrde',
@@ -15,7 +16,8 @@ import { catchError, finalize, of } from 'rxjs';
     MatCardModule,
     MatButtonModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    ActionButtonComponent
   ],
   templateUrl: './uzimanje-potvrde.html',
   styleUrl: './uzimanje-potvrde.scss',

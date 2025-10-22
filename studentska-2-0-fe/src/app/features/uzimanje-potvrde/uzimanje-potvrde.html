@@ -20,36 +20,33 @@
     <mat-card class="action-card">
       <mat-card-content>
         <div class="action-buttons">
-          <button 
-            mat-raised-button 
-            color="primary" 
-            [disabled]="isLoading()"
-            (click)="generatePdf()"
+          <app-action-button
+            text="Generiši potvrdu"
+            type="button"
+            variant="raised"
+            color="primary"
+            icon="picture_as_pdf"
+            size="large"
+            loadingText="Generišem potvrdu..."
+            [loading]="isLoading()"
+            [disabled]="false"
+            (clicked)="generatePdf()"
             class="generate-btn">
-            @if (isLoading()) {
-              <ng-container>
-                <mat-spinner diameter="20" color="primary"></mat-spinner>
-                <span>Generišem potvrdu...</span>
-              </ng-container>
-            } @else {
-              <ng-container>
-                <mat-icon>picture_as_pdf</mat-icon>
-                <span>Generiši potvrdu</span>
-              </ng-container>
-            }
-          </button>
+          </app-action-button>
 
           @if (pdfUrl() && !hasError()) {
-            <button 
-              mat-raised-button 
-              color="accent" 
-              (click)="downloadPdf()"
+            <app-action-button
+              text="Preuzmi PDF"
+              type="button"
+              variant="raised"
+              color="accent"
+              icon="download"
+              size="large"
+              [loading]="false"
+              [disabled]="false"
+              (clicked)="downloadPdf()"
               class="download-btn">
-              <ng-container>
-                <mat-icon>download</mat-icon>
-                <span>Preuzmi PDF</span>
-              </ng-container>
-            </button>
+            </app-action-button>
           }
         </div>
 

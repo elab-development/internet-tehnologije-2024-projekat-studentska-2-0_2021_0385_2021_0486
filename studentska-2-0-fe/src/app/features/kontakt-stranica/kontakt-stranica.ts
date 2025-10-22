@@ -1,11 +1,12 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
+import { Component } from '@angular/core';
+import { EmptyScreenComponent } from "../../shared/components/empty-screen/empty-screen.component";
 
 @Component({
   selector: 'app-kontakt-stranica',
-  imports: [MatIconModule],
-  templateUrl: '../shared/placeholder.html',
-  styleUrl: '../shared/placeholder.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [EmptyScreenComponent],
+  templateUrl: './kontakt-stranica.html',
+  styleUrl: './kontakt-stranica.scss'
 })
-export class KontaktStranica {}
+export class KontaktStranica {
+
+}
