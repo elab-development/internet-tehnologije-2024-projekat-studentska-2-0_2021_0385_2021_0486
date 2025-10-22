@@ -150,6 +150,8 @@
       }
 
       mat-card-content {
+        flex: 1;
+
         .course-info {
           .espb-badge {
             display: inline-flex;
