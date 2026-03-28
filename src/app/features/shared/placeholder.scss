@@ -1,0 +1,33 @@
+:host {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	text-align: center;
+}
+
+.placeholder-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+	color: var(--mat-sys-on-surface-variant);
+}
+
+.placeholder-icon {
+	font-size: 4rem;
+	width: 64px;
+	height: 64px;
+	color: var(--mat-sys-primary);
+}
+
+.mat-headline-small {
+	margin: 0;
+	font-weight: 600;
+	color: var(--mat-sys-on-surface);
+}
+
+.mat-body-large {
+	margin: 0;
+	max-width: 300px;
+}

@@ -1,0 +1,16 @@
+<mat-form-field>
+  <mat-label>{{ label() }}</mat-label>
+  <input 
+    matInput 
+    [type]="type()" 
+    [formControl]="control()" 
+    [placeholder]="placeholder()"
+    [required]="required()" 
+  />
+  
+  @if (control().touched && control().invalid && getErrorMessage()) {<mat-error>{{ getErrorMessage() }}</mat-error>}
+ @if (getServerErrorMessage()) {
+      <mat-error>{{ getServerErrorMessage() }}</mat-error>
+    }
+  
+</mat-form-field>

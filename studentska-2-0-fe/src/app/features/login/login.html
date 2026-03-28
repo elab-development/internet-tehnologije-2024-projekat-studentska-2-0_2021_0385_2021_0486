@@ -1,0 +1,55 @@
+<div class="login-container">
+	<mat-card appearance="outlined">
+		<mat-card-header>
+			<mat-card-title>Prijava</mat-card-title>
+			<mat-card-subtitle>Unesite Vaše podatke za prijavu</mat-card-subtitle>
+		</mat-card-header>
+		<mat-card-content>
+			<form [formGroup]="form" (ngSubmit)="onSubmit()" class="form">
+				@if (authMessage()) {
+					<p class="error">{{ authMessage() }}</p>
+				}
+
+				<app-form-field 
+					[control]="form.controls.email"
+					label="Email"
+					type="email"
+					fieldName="email"
+					[required]="true"
+					[serverErrors]="serverErrors()"
+					[errorMessages]="{
+						'required': 'Email je obavezan.',
+						'email': 'Unesite validan email.'
+					}">
+				</app-form-field>
+
+				<app-form-field 
+					[control]="form.controls.password"
+					label="Lozinka"
+					type="password"
+					fieldName="password"
+					[required]="true"
+					[serverErrors]="serverErrors()"
+					[errorMessages]="{
+						'required': 'Lozinka je obavezna.'
+					}">
+				</app-form-field>
+			</form>
+		</mat-card-content>
+		<mat-card-actions align="end">
+			<a mat-button routerLink="/o-nama" appHighlight [highlightColor]="'#f0f4ff'">O nama</a>
+			<app-action-button 
+				text="Prijavi se"
+				type="submit"
+				variant="raised"
+				color="primary"
+				icon="login"
+				loadingText="Prijavljivanje..."
+				[loading]="submitting()"
+				[disabled]="form.invalid"
+				(clicked)="onSubmit()">
+			</app-action-button>
+		</mat-card-actions>
+		<a mat-button routerLink="/register" appHighlight [highlightColor]="'#f0f4ff'">Nemaš nalog? Registruj se</a>
+	</mat-card>
+</div>

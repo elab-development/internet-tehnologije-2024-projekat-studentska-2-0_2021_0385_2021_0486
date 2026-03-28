@@ -1,0 +1,133 @@
+@use '@angular/material' as mat;
+
+:host {
+    display: block;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+.shell-container {
+    height: 100%;
+    background-color: var(--mat-sys-background);
+}
+
+.shell-sidenav {
+    width: 260px;
+    border-right: 1px solid var(--mat-divider-color);
+    background-color: var(--mat-sys-surface);
+    display: flex;
+    flex-direction: column;
+
+    .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 20px 24px;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--mat-sys-primary);
+
+        .brand-icon {
+            font-size: 2rem;
+            width: 32px;
+            height: 32px;
+        }
+    }
+
+    .nav-items {
+        display: flex;
+        flex-direction: column;
+        padding: 0 12px;
+        gap: 4px;
+    }
+
+    .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 0 16px;
+        height: 48px;
+        border-radius: 24px;
+        color: var(--mat-sys-on-surface-variant);
+        text-decoration: none;
+        font-weight: 500;
+        transition: background-color 200ms ease, color 200ms ease;
+
+        .mat-icon {
+            color: var(--mat-sys-on-surface-variant);
+            transition: color 200ms ease;
+        }
+
+        &.active {
+            background-color: var(--mat-sys-primary-container);
+            color: var(--mat-sys-on-primary-container);
+
+            .mat-icon {
+                color: var(--mat-sys-on-primary-container);
+            }
+        }
+
+        &:hover:not(.active) {
+            background-color: var(--mat-sys-surface-container-hover);
+        }
+    }
+
+    .spacer {
+        display: flex;
+        flex: 1 1 auto;
+    }
+
+    .sidenav-footer {
+        display: flex;
+        justify-content: flex-end;
+        align-self: stretch;
+        gap: 8px;
+        padding: 16px;
+        border-top: 1px solid var(--mat-divider-color);
+    }
+}
+
+.shell-content {
+    background-color: var(--mat-sys-surface-container-lowest);
+
+    .mat-toolbar {
+        background-color: var(--mat-sys-surface);
+        color: var(--mat-sys-on-surface);
+        border-bottom: 1px solid var(--mat-divider-color);
+        display: flex;
+        align-items: center;
+    }
+
+    .spacer {
+        flex: 1 1 auto;
+    }
+
+    .user-info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        line-height: 1.2;
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            color: var(--mat-sys-on-surface-variant);
+        }
+    }
+
+    .content-wrapper {
+        padding: 24px;
+        height: calc(100% - 64px);
+        overflow-y: auto;
+    }
+}
+
+::ng-deep .mat-drawer-inner-container {
+    display: flex !important;
+    flex-direction: column !important;
+}

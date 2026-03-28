@@ -1,0 +1,334 @@
+<div class="predmeti-admin-container">
+  <!-- Header Section -->
+  <div class="header-section">
+    <mat-card class="welcome-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon class="title-icon">school</mat-icon>
+          Administracija kurseva
+        </mat-card-title>
+        <mat-card-subtitle>
+          Upravljanje svim kursevima u sistemu
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-actions>
+        <button mat-raised-button 
+                color="primary" 
+                (click)="openCreateDialog()"
+                [disabled]="isCreating()">
+          <mat-icon>add</mat-icon>
+          <span>Dodaj novi kurs</span>
+        </button>
+        <button mat-button 
+                (click)="searchCourses()"
+                [disabled]="isLoading()">
+          <mat-icon>refresh</mat-icon>
+          <span>Osveži</span>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <!-- Search and Filter Section -->
+  <div class="filter-section">
+    <mat-card class="filter-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>filter_list</mat-icon>
+          Pretraži i filtriraj
+        </mat-card-title>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <form [formGroup]="searchForm" class="search-form">
+          <div class="search-row">
+            <mat-form-field appearance="outline" class="search-field">
+              <mat-label>Pretraži po nazivu</mat-label>
+              <input matInput formControlName="naziv" placeholder="Unesite naziv kursa">
+              <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline" class="search-field">
+              <mat-label>Šifra predmeta</mat-label>
+              <input matInput formControlName="sifra_predmeta" placeholder="Unesite šifru">
+              <mat-icon matSuffix>code</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="filter-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Semestar</mat-label>
+              <mat-select formControlName="semestar">
+                <mat-option value="">Svi semestri</mat-option>
+                <mat-option value="1">1. semestar</mat-option>
+                <mat-option value="2">2. semestar</mat-option>
+                <mat-option value="3">3. semestar</mat-option>
+                <mat-option value="4">4. semestar</mat-option>
+                <mat-option value="5">5. semestar</mat-option>
+                <mat-option value="6">6. semestar</mat-option>
+                <mat-option value="7">7. semestar</mat-option>
+                <mat-option value="8">8. semestar</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Godina studija</mat-label>
+              <mat-select formControlName="godina">
+                <mat-option value="">Sve godine</mat-option>
+                <mat-option value="1">1. godina</mat-option>
+                <mat-option value="2">2. godina</mat-option>
+                <mat-option value="3">3. godina</mat-option>
+                <mat-option value="4">4. godina</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>ESPB</mat-label>
+              <mat-select formControlName="espb">
+                <mat-option value="">Svi ESPB</mat-option>
+                <mat-option value="3">3 ESPB</mat-option>
+                <mat-option value="4">4 ESPB</mat-option>
+                <mat-option value="5">5 ESPB</mat-option>
+                <mat-option value="6">6 ESPB</mat-option>
+                <mat-option value="7">7 ESPB</mat-option>
+                <mat-option value="8">8 ESPB</mat-option>
+                <mat-option value="10">10 ESPB</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Sortiraj po</mat-label>
+              <mat-select formControlName="sort_by">
+                <mat-option value="naziv">Naziv</mat-option>
+                <mat-option value="sifra_predmeta">Šifra</mat-option>
+                <mat-option value="espb">ESPB</mat-option>
+                <mat-option value="semestar">Semestar</mat-option>
+                <mat-option value="godina">Godina</mat-option>
+                <mat-option value="created_at">Datum kreiranja</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Redosled</mat-label>
+              <mat-select formControlName="sort_order">
+                <mat-option value="asc">Rastući</mat-option>
+                <mat-option value="desc">Opadajući</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="filter-actions">
+            <button mat-raised-button 
+                    type="button"
+                    color="primary" 
+                    (click)="searchCourses()"
+                    [disabled]="isLoading()">
+              <mat-icon>search</mat-icon>
+              <span>Pretraži</span>
+            </button>
+            
+            <button mat-button 
+                    type="button"
+                    (click)="clearFilters()"
+                    [disabled]="isLoading()">
+              <mat-icon>clear</mat-icon>
+              <span>Očisti filtere</span>
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content-section">
+    <mat-card class="table-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>list</mat-icon>
+          Lista kurseva 
+          @if (searchResponse()) {
+            <span>({{ searchResponse()!.meta.total }} ukupno, {{ searchResponse()!.meta.from }}-{{ searchResponse()!.meta.to }})</span>
+          }
+        </mat-card-title>
+      </mat-card-header>
+      
+      <mat-card-content>
+        @if (isLoading()) {
+          <div class="loading-container">
+            <mat-spinner diameter="50"></mat-spinner>
+            <p>Pretražujem kurseve...</p>
+          </div>
+        } @else if (courses().length === 0) {
+          <div class="empty-state">
+            <mat-icon class="empty-icon">school</mat-icon>
+            <h3>Nema pronađenih kurseva</h3>
+            <p>Probajte sa drugačijim kriterijumima pretrage ili dodajte novi kurs.</p>
+          </div>
+        } @else {
+          <div class="table-container" (scroll)="onTableScroll($event)">
+            <table mat-table [dataSource]="courses()" class="courses-table">
+              <!-- Naziv Column -->
+              <ng-container matColumnDef="naziv">
+                <th mat-header-cell *matHeaderCellDef>Naziv</th>
+                <td mat-cell *matCellDef="let course" class="naziv-cell">
+                  <strong>{{ course.naziv }}</strong>
+                </td>
+              </ng-container>
+
+              <!-- Šifra Column -->
+              <ng-container matColumnDef="sifra">
+                <th mat-header-cell *matHeaderCellDef>Šifra</th>
+                <td mat-cell *matCellDef="let course">
+                  <span class="sifra-badge">{{ course.sifra || 'N/A' }}</span>
+                </td>
+              </ng-container>
+
+              <!-- ESPB Column -->
+              <ng-container matColumnDef="espb">
+                <th mat-header-cell *matHeaderCellDef>ESPB</th>
+                <td mat-cell *matCellDef="let course">
+                  <span class="espb-badge">{{ course.espb }}</span>
+                </td>
+              </ng-container>
+
+              <!-- Semestar Column -->
+              <ng-container matColumnDef="semestar">
+                <th mat-header-cell *matHeaderCellDef>Semestar</th>
+                <td mat-cell *matCellDef="let course">
+                  <span class="semester-badge">{{ course.semestar || 'N/A' }}</span>
+                </td>
+              </ng-container>
+
+              <!-- Godina Column -->
+              <ng-container matColumnDef="godina">
+                <th mat-header-cell *matHeaderCellDef>Godina</th>
+                <td mat-cell *matCellDef="let course">
+                  <span class="year-badge">{{ course.godina || 'N/A' }}</span>
+                </td>
+              </ng-container>
+
+              <!-- Actions Column -->
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>Akcije</th>
+                <td mat-cell *matCellDef="let course">
+                  <div class="actions-container">
+                    <button mat-icon-button 
+                            [matTooltip]="'Prikaži detalje'"
+                            (click)="viewDetails(course)"
+                            class="action-btn detail-btn">
+                      <mat-icon>visibility</mat-icon>
+                    </button>
+                    
+                    <button mat-icon-button 
+                            [matTooltip]="'Izmeni kurs'"
+                            (click)="openEditDialog(course)"
+                            class="action-btn edit-btn">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    
+                    <button mat-icon-button 
+                            [matTooltip]="'Obriši kurs'"
+                            (click)="deleteCourse(course)"
+                            class="action-btn delete-btn">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          </div>
+
+          @if (searchResponse() && searchResponse()!.meta.total > 0) {
+            <mat-paginator 
+              [length]="searchResponse()!.meta.total"
+              [pageSize]="searchResponse()!.meta.per_page"
+              [pageIndex]="searchResponse()!.meta.current_page - 1"
+              [pageSizeOptions]="[10, 15, 25, 50]"
+              [showFirstLastButtons]="true"
+              (page)="onPageChange($event)"
+              class="courses-paginator">
+            </mat-paginator>
+          }
+        }
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Course Details Sidebar -->
+  @if (showDetails() && selectedCourse()) {
+    <div class="details-overlay" (click)="closeDetails()" (keydown.enter)="closeDetails()" tabindex="0">
+      <div class="details-sidebar" (click)="$event.stopPropagation()" (keydown.enter)="$event.stopPropagation()" tabindex="0">
+        <div class="details-header">
+          <h2>
+            <mat-icon>info</mat-icon>
+            Detalji kursa
+          </h2>
+          <button mat-icon-button (click)="closeDetails()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+
+        <div class="details-content">
+          <div class="detail-item">
+            <span class="label">Naziv:</span>
+            <span>{{ selectedCourse()!.naziv }}</span>
+          </div>
+          
+          <div class="detail-item">
+            <span class="label">Šifra:</span>
+            <span>{{ selectedCourse()!.sifra || 'Nije definisano' }}</span>
+          </div>
+          
+          <div class="detail-item">
+            <span class="label">ESPB bodovi:</span>
+            <span>{{ selectedCourse()!.espb }}</span>
+          </div>
+          
+          <div class="detail-item">
+            <span class="label">Semestar:</span>
+            <span>{{ selectedCourse()!.semestar || 'Nije definisano' }}</span>
+          </div>
+          
+          <div class="detail-item">
+            <span class="label">Godina studija:</span>
+            <span>{{ selectedCourse()!.godina || 'Nije definisano' }}</span>
+          </div>
+          
+          @if (selectedCourse()!.created_at) {
+            <div class="detail-item">
+              <span class="label">Kreiran:</span>
+              <span>{{ selectedCourse()!.created_at | date:'dd.MM.yyyy HH:mm' }}</span>
+            </div>
+          }
+          
+          @if (selectedCourse()!.updated_at) {
+            <div class="detail-item">
+              <span class="label">Poslednja izmena:</span>
+              <span>{{ selectedCourse()!.updated_at | date:'dd.MM.yyyy HH:mm' }}</span>
+            </div>
+          }
+        </div>
+
+        <div class="details-actions">
+          <button mat-raised-button 
+                  color="primary" 
+                  (click)="openEditDialog(selectedCourse()!)">
+            <mat-icon>edit</mat-icon>
+            <span>Izmeni</span>
+          </button>
+          
+          <button mat-raised-button 
+                  color="warn" 
+                  (click)="deleteCourse(selectedCourse()!)">
+            <mat-icon>delete</mat-icon>
+            <span>Obriši</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>
